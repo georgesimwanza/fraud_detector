@@ -1,0 +1,7 @@
+{
+  // Node and Python were installed while VS Code was open, so its terminals inherited a stale PATH.
+  // Prepend the install folders for terminals in this workspace. Harmless once VS Code is restarted.
+  "terminal.integrated.env.windows": {
+    "Path": "C:\\Program Files\\nodejs;${env:APPDATA}\\npm;${env:LOCALAPPDATA}\\Programs\\Python\\Python312;${env:LOCALAPPDATA}\\Programs\\Python\\Python312\\Scripts;${env:Path}"
+  }
+}

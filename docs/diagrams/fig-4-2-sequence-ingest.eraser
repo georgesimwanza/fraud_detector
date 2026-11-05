@@ -1,0 +1,40 @@
+// Figure 4.2 — Sequence diagram: ingesting and scoring a transaction
+// Eraser: New diagram > Sequence diagram, paste this code.
+title Ingest and score a transaction
+
+Simulator [icon: send, color: gray]
+Ingest API [icon: server, color: blue]
+Store [icon: layers, color: blue]
+Inference service [icon: cpu, color: purple]
+PostgreSQL [icon: database, color: green]
+Dashboard (browser) [icon: monitor, color: orange]
+
+Simulator > Ingest API: POST /api/transactions (X-Api-Key, 30 features, optional label)
+activate Ingest API
+Ingest API > Ingest API: verify API key (constant-time SHA-256 compare)
+alt [label: invalid key, color: red] {
+  Ingest API --> Simulator: 401 Invalid API key
+}
+Ingest API > Ingest API: validate against the contract (zod)
+alt [label: invalid record, color: red] {
+  Ingest API --> Simulator: 400 with the failing fields
+}
+Ingest API > Store: existing transaction id?
+Store > PostgreSQL: SELECT id FROM transactions
+alt [label: duplicate, color: orange] {
+  Ingest API --> Simulator: 409 Duplicate transaction ID
+}
+Ingest API > Store: current threshold (5 s cache)
+Ingest API > Inference service: POST /predict (features only, 800 ms timeout)
+activate Inference service
+Inference service > Inference service: scale Time and Amount, run CNN
+Inference service --> Ingest API: probability, model version (+ shadow score)
+deactivate Inference service
+Ingest API > Ingest API: isHighRisk(probability, threshold)
+Ingest API > Store: commit transaction (+ alert if high risk) + daily stats
+activate Store
+Store > PostgreSQL: BEGIN; INSERT transaction; INSERT alert; UPSERT daily_stats; COMMIT
+Store --> Dashboard (browser): SSE events: transaction, alert, stats
+deactivate Store
+Ingest API --> Simulator: 201 probability, risk level, threshold used, latency
+deactivate Ingest API

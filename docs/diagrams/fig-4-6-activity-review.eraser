@@ -1,0 +1,41 @@
+// Figure 4.6 — Activity diagram: analyst alert review workflow (swimlanes as groups)
+// Eraser: New diagram > Flow chart, paste this code.
+direction right
+
+Analyst [color: blue] {
+  Start [shape: oval, color: black, label: ""]
+  Open alerts queue [icon: list]
+  Filter by status and sort [icon: filter]
+  Open an alert [icon: eye]
+  Study score + explanation + features [icon: search]
+  Is it fraud? [shape: diamond, color: yellow]
+  Confirm fraud with note [color: red]
+  Mark false positive with note [color: green]
+  End [shape: oval, color: black, label: ""]
+}
+
+System [color: purple] {
+  Show live queue of open alerts [icon: monitor]
+  Compute or load explanation [icon: cpu]
+  Alert still open or user is admin? [shape: diamond, color: yellow]
+  Refuse with 403 [color: red]
+  Update alert + counters + audit log [icon: database]
+  Push update to every dashboard [icon: radio]
+}
+
+Start > Open alerts queue
+Open alerts queue > Show live queue of open alerts
+Show live queue of open alerts > Filter by status and sort
+Filter by status and sort > Open an alert
+Open an alert > Compute or load explanation
+Compute or load explanation > Study score + explanation + features
+Study score + explanation + features > Is it fraud?
+Is it fraud? > Confirm fraud with note: yes
+Is it fraud? > Mark false positive with note: no
+Confirm fraud with note > Alert still open or user is admin?
+Mark false positive with note > Alert still open or user is admin?
+Alert still open or user is admin? > Refuse with 403: no
+Alert still open or user is admin? > Update alert + counters + audit log: yes
+Update alert + counters + audit log > Push update to every dashboard
+Push update to every dashboard > End
+Refuse with 403 > End

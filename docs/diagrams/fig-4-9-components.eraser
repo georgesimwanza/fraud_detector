@@ -1,0 +1,50 @@
+// Figure 4.9 — Component diagram
+// Eraser: New diagram > Cloud architecture (or Flow chart), paste this code.
+direction right
+
+Browser client [icon: monitor, color: orange] {
+  Pages and components [icon: layout]
+  Live data mirror (lib/live.ts) [icon: radio]
+}
+
+Next.js web server [icon: server, color: blue] {
+  Middleware (cookie check) [icon: filter]
+  Route handlers [icon: git-branch] {
+    Ingest API [icon: inbox]
+    Auth API [icon: lock]
+    Alerts API [icon: bell]
+    Reports API [icon: file-text]
+    Model health API [icon: activity]
+    Admin API (users / audit / threshold) [icon: settings]
+    Live stream (SSE) [icon: radio]
+  }
+  Libraries [icon: package] {
+    schemas.ts (contract + isHighRisk) [icon: file-code]
+    session.ts (JWT + roles) [icon: key]
+    store.ts (all SQL) [icon: database]
+    scoring.ts (inference client) [icon: cpu]
+    analytics.ts (pure calculations) [icon: bar-chart]
+  }
+}
+
+Inference service (FastAPI) [icon: cpu, color: purple] {
+  Predict endpoint [icon: zap]
+  Explain endpoint [icon: search]
+  Model bundle loader [icon: box]
+}
+
+Model bundles [icon: folder, color: gray]
+PostgreSQL 18 [icon: database, color: green]
+Transaction simulator [icon: send, color: gray]
+Training scripts [icon: terminal, color: gray]
+
+Pages and components > Route handlers: fetch / PATCH
+Live data mirror (lib/live.ts) < Live stream (SSE): events
+Middleware (cookie check) > Route handlers
+Route handlers > Libraries
+store.ts (all SQL) > PostgreSQL 18: parameterised SQL
+scoring.ts (inference client) > Predict endpoint: HTTP + internal key
+scoring.ts (inference client) > Explain endpoint
+Model bundle loader > Model bundles: load at startup
+Transaction simulator > Ingest API: HTTP + API key
+Training scripts > Model bundles: write model, scaler, metadata

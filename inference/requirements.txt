@@ -1,0 +1,10 @@
+fastapi==0.115.*
+uvicorn[standard]==0.34.*
+pydantic==2.*
+numpy
+scikit-learn
+joblib
+tensorflow==2.20.*
+# tests
+pytest
+httpx

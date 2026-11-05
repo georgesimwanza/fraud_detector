@@ -1,0 +1,32 @@
+// Figure 4.11 — CNN architecture (training/train_cnn.py build_model)
+// Eraser: New diagram > Flow chart, paste this code.
+direction down
+
+Input 30 features x 1 [shape: parallelogram, icon: list, color: gray]
+Conv1D 64 filters k3 ReLU [color: blue]
+Batch normalisation 1 [color: lightblue]
+Conv1D 128 filters k3 ReLU [color: blue]
+Batch normalisation 2 [color: lightblue]
+Conv1D 256 filters k3 ReLU [color: blue]
+Batch normalisation 3 [color: lightblue]
+Global max pooling [color: purple]
+Dense 128 ReLU [color: green]
+Dropout 0.4 (a) [color: gray]
+Dense 64 ReLU [color: green]
+Dropout 0.4 (b) [color: gray]
+Dense 1 sigmoid [color: red]
+Fraud probability 0 to 1 [shape: parallelogram, icon: percent, color: orange]
+
+Input 30 features x 1 > Conv1D 64 filters k3 ReLU: Time, V1..V28, Amount (Time and Amount scaled)
+Conv1D 64 filters k3 ReLU > Batch normalisation 1
+Batch normalisation 1 > Conv1D 128 filters k3 ReLU
+Conv1D 128 filters k3 ReLU > Batch normalisation 2
+Batch normalisation 2 > Conv1D 256 filters k3 ReLU
+Conv1D 256 filters k3 ReLU > Batch normalisation 3
+Batch normalisation 3 > Global max pooling
+Global max pooling > Dense 128 ReLU
+Dense 128 ReLU > Dropout 0.4 (a)
+Dropout 0.4 (a) > Dense 64 ReLU
+Dense 64 ReLU > Dropout 0.4 (b)
+Dropout 0.4 (b) > Dense 1 sigmoid
+Dense 1 sigmoid > Fraud probability 0 to 1

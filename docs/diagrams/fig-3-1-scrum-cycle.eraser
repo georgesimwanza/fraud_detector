@@ -1,0 +1,28 @@
+// Figure 3.1 — Agile Scrum development cycle (two-week sprints)
+// Eraser: New diagram > Flow chart, paste this code.
+direction right
+
+Product backlog [shape: document, icon: list, color: gray]
+Sprint planning [shape: oval, icon: calendar, color: blue]
+Sprint backlog [shape: document, icon: clipboard, color: gray]
+
+Two-week sprint [color: blue] {
+  Develop [icon: code]
+  Test [icon: check-circle]
+  Daily review of progress [icon: refresh-cw]
+}
+
+Working increment [shape: rectangle, icon: package, color: green]
+Sprint review with supervisor [shape: oval, icon: users, color: orange]
+Sprint retrospective [shape: oval, icon: rotate-ccw, color: purple]
+
+Product backlog > Sprint planning: prioritise must / should / could
+Sprint planning > Sprint backlog
+Sprint backlog > Develop
+Develop > Test
+Test > Daily review of progress
+Daily review of progress > Develop: next task
+Test > Working increment
+Working increment > Sprint review with supervisor: demonstrate
+Sprint review with supervisor > Sprint retrospective
+Sprint retrospective > Product backlog: adjust plan and requirements

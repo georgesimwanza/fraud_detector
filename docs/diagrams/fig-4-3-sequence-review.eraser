@@ -1,0 +1,36 @@
+// Figure 4.3 — Sequence diagram: an analyst reviews an alert
+// Eraser: New diagram > Sequence diagram, paste this code.
+title Review an alert
+
+Analyst [icon: user, color: blue]
+Browser [icon: monitor, color: orange]
+Web server [icon: server, color: blue]
+Inference service [icon: cpu, color: purple]
+PostgreSQL [icon: database, color: green]
+
+Analyst > Browser: open alert from list
+Browser > Web server: GET /api/alerts/:id/explanation (session cookie)
+activate Web server
+Web server > PostgreSQL: verify session user, role, active
+alt [label: explanation cached, color: green] {
+  PostgreSQL --> Web server: stored attributions
+}
+else [label: first view] {
+  Web server > Inference service: POST /explain (features)
+  Inference service --> Web server: integrated-gradients attributions
+  Web server > PostgreSQL: cache explanation (same model only)
+}
+Web server --> Browser: top features pushing toward fraud / legitimate
+deactivate Web server
+
+Analyst > Browser: Confirm fraud / Mark false positive + note
+Browser > Web server: PATCH /api/alerts/:id decision and note
+activate Web server
+Web server > PostgreSQL: BEGIN; SELECT alert FOR UPDATE
+alt [label: already reviewed and user is analyst, color: red] {
+  Web server --> Browser: 403 Only an admin can change the decision
+}
+Web server > PostgreSQL: UPDATE alert; move daily_stats counters; INSERT audit_logs; COMMIT
+Web server --> Browser: updated alert (and SSE to every open dashboard)
+deactivate Web server
+Browser --> Analyst: decision recorded

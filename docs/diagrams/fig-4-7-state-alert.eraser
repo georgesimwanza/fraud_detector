@@ -1,0 +1,14 @@
+// Figure 4.7 — State chart: alert lifecycle
+// Eraser: New diagram > Flow chart, paste this code.
+direction right
+
+Initial [shape: oval, color: black, label: ""]
+Open [shape: rectangle, icon: alert-circle, color: yellow]
+Confirmed fraud [shape: rectangle, icon: x-circle, color: red]
+False positive [shape: rectangle, icon: check-circle, color: green]
+
+Initial > Open: transaction scored with probability ≥ threshold
+Open > Confirmed fraud: analyst or admin confirms (with note)
+Open > False positive: analyst or admin dismisses (with note)
+Confirmed fraud > False positive: admin changes decision (audited)
+False positive > Confirmed fraud: admin changes decision (audited)

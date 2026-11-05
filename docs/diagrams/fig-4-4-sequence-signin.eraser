@@ -1,0 +1,32 @@
+// Figure 4.4 — Sequence diagram: sign-in and an authenticated request
+// Eraser: New diagram > Sequence diagram, paste this code.
+title Sign in and use a session
+
+User [icon: user, color: blue]
+Browser [icon: monitor, color: orange]
+Middleware [icon: filter, color: gray]
+Auth route [icon: lock, color: blue]
+PostgreSQL [icon: database, color: green]
+
+User > Browser: email + password
+Browser > Auth route: POST /api/auth/session
+activate Auth route
+Auth route > PostgreSQL: find user by email
+Auth route > Auth route: bcrypt compare (dummy hash if email unknown)
+alt [label: wrong email, password or inactive, color: red] {
+  Auth route > PostgreSQL: audit auth.login_failed
+  Auth route --> Browser: 401 Invalid email or password
+}
+Auth route > PostgreSQL: audit auth.login
+Auth route --> Browser: Set-Cookie session = HS256 JWT (HttpOnly, Secure, SameSite=Lax, 2 h)
+deactivate Auth route
+
+User > Browser: open /dashboard
+Browser > Middleware: request with cookie
+Middleware > Middleware: cookie present? (convenience redirect only)
+Middleware > Auth route: forward to page / route handler
+activate Auth route
+Auth route > Auth route: verify JWT signature, issuer, audience, expiry
+Auth route > PostgreSQL: re-read role and active flag
+Auth route --> Browser: page for this role (403 / access message if not allowed)
+deactivate Auth route

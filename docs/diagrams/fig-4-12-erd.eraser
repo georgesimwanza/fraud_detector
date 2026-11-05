@@ -1,0 +1,88 @@
+// Figure 4.12 — Entity-relationship diagram (web/db/migrations/001_init.sql + 002_monitoring.sql)
+// Eraser: New diagram > Entity relationship, paste this code.
+
+users [icon: user, color: blue] {
+  id uuid pk
+  email text unique
+  password_hash text
+  role text
+  active boolean
+  created_at timestamptz
+}
+
+transactions [icon: credit-card, color: orange] {
+  id text pk
+  time double
+  amount double
+  v float8_array_28
+  label smallint
+  probability double
+  risk_level text
+  is_alert boolean
+  status text
+  model_version text
+  threshold_used double
+  received_at timestamptz
+  latency_ms integer
+  shadow_probability double
+  shadow_model_version text
+}
+
+alerts [icon: bell, color: red] {
+  id text pk fk
+  amount double
+  probability double
+  threshold_used double
+  model_version text
+  status text
+  created_at timestamptz
+  reviewed_by uuid fk
+  reviewed_at timestamptz
+  note text
+  explanation jsonb
+}
+
+model_versions [icon: cpu, color: purple] {
+  version text pk
+  stub boolean
+  trained_at timestamptz
+  dataset text
+  suggested_threshold double
+  metrics jsonb
+  registered_at timestamptz
+}
+
+settings [icon: settings, color: gray] {
+  id smallint pk
+  threshold double
+  active_model_version text fk
+  updated_at timestamptz
+}
+
+daily_stats [icon: bar-chart, color: green] {
+  day date pk
+  total integer
+  alerts integer
+  open integer
+  confirmed_fraud integer
+  false_positive integer
+  scoring_failed integer
+  latency_sum_ms bigint
+}
+
+audit_logs [icon: file-text, color: gray] {
+  id bigserial pk
+  at timestamptz
+  actor_id uuid fk
+  actor_email text
+  role text
+  action text
+  target text
+  before jsonb
+  after jsonb
+}
+
+alerts.id - transactions.id
+alerts.reviewed_by > users.id
+audit_logs.actor_id > users.id
+settings.active_model_version > model_versions.version

@@ -1,0 +1,47 @@
+// Figure 4.10 — System architecture (deployment on one development computer)
+// Eraser: New diagram > Cloud architecture, paste this code.
+direction right
+
+Users [color: orange] {
+  Analyst [icon: user]
+  Administrator [icon: user-check]
+}
+
+Development computer (Windows 10) [icon: laptop, color: gray] {
+  Browser (Edge) [icon: monitor]
+
+  Web tier [color: blue] {
+    Next.js 15 web app (port 3000) [icon: nextjs]
+  }
+
+  Model tier [color: purple] {
+    FastAPI inference (port 8000) [icon: python]
+    TensorFlow / Keras CNN [icon: tensorflow]
+    Shadow model (optional) [icon: copy]
+  }
+
+  Data tier [color: green] {
+    PostgreSQL 18 (port 5432) [icon: postgres]
+  }
+
+  Files [color: gray] {
+    Model bundle folder [icon: folder]
+    ULB test split CSV [icon: file]
+  }
+
+  Python simulator [icon: send]
+  Training pipeline [icon: terminal]
+}
+
+Analyst > Browser (Edge)
+Administrator > Browser (Edge)
+Browser (Edge) <> Next.js 15 web app (port 3000): HTTPS in production / HTTP locally; SSE live updates
+Python simulator > Next.js 15 web app (port 3000): POST transactions (API key)
+Next.js 15 web app (port 3000) > FastAPI inference (port 8000): /predict, /explain (internal key)
+Next.js 15 web app (port 3000) > PostgreSQL 18 (port 5432): SQL (fraud_app role)
+FastAPI inference (port 8000) > TensorFlow / Keras CNN
+FastAPI inference (port 8000) > Shadow model (optional)
+TensorFlow / Keras CNN < Model bundle folder
+Training pipeline > Model bundle folder
+Training pipeline > ULB test split CSV
+Python simulator < ULB test split CSV

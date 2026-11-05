@@ -1,0 +1,51 @@
+// Figure 4.1 — Use case diagram
+// Eraser has no native UML use-case type: actors are drawn as person icons, use cases as ovals,
+// and the system boundary as a group. Eraser: New diagram > Flow chart, paste this code.
+direction right
+
+Analyst [shape: oval, icon: user, color: blue]
+Administrator [shape: oval, icon: user-check, color: purple]
+Transaction source (simulator) [shape: rectangle, icon: send, color: gray]
+Inference service [shape: rectangle, icon: cpu, color: gray]
+
+Payment Fraud Detection System [color: lightblue] {
+  Sign in / sign out [shape: oval]
+  Monitor live dashboard [shape: oval]
+  List / filter / sort alerts [shape: oval]
+  View alert and explanation [shape: oval]
+  Record decision with note [shape: oval]
+  Generate period report [shape: oval]
+  View model health [shape: oval]
+  Change a reviewed decision [shape: oval]
+  Configure alert threshold [shape: oval]
+  Manage users and roles [shape: oval]
+  View audit log [shape: oval]
+  Export analyst feedback [shape: oval]
+  Submit transaction(s) [shape: oval]
+  Score transaction [shape: oval]
+  Raise alert [shape: oval]
+}
+
+// Analyst
+Analyst - Sign in / sign out
+Analyst - Monitor live dashboard
+Analyst - List / filter / sort alerts
+Analyst - View alert and explanation
+Analyst - Record decision with note
+Analyst - Generate period report
+Analyst - View model health
+
+// Administrator: everything the analyst can do (generalisation), plus administration
+Administrator > Analyst: inherits
+Administrator - Change a reviewed decision
+Administrator - Configure alert threshold
+Administrator - Manage users and roles
+Administrator - View audit log
+Administrator - Export analyst feedback
+
+// System actors
+Transaction source (simulator) - Submit transaction(s)
+Submit transaction(s) --> Score transaction: «include»
+Score transaction - Inference service
+Raise alert --> Score transaction: «extend» probability ≥ threshold
+View alert and explanation --> Inference service: explanation on first view

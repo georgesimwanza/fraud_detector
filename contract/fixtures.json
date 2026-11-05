@@ -1,0 +1,103 @@
+{
+  "_comment": "Shared contract fixtures. web/lib/schemas.test.ts (zod) and inference/tests/test_contract.py (pydantic) must agree on every case.",
+  "valid": [
+    {
+      "name": "full payload with label",
+      "payload": {
+        "externalId": "tx-000123",
+        "time": 406,
+        "amount": 149.62,
+        "v": [-1.3598, -0.0728, 2.5363, 1.3782, -0.3383, 0.4624, 0.2396, 0.0987, 0.3638, 0.0908, -0.5516, -0.6178, -0.9914, -0.3112, 1.4682, -0.4704, 0.2080, 0.0258, 0.4040, 0.2514, -0.0183, 0.2778, -0.1105, 0.0669, 0.1285, -0.1891, 0.1336, -0.0211],
+        "label": 0
+      }
+    },
+    {
+      "name": "minimal payload (no externalId, no label)",
+      "payload": {
+        "time": 0,
+        "amount": 0,
+        "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    {
+      "name": "unknown fields are stripped",
+      "payload": {
+        "externalId": "a_B-9",
+        "time": 1.5,
+        "amount": 2,
+        "v": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
+        "label": 1,
+        "merchant": "should be dropped",
+        "Class": 1
+      },
+      "stripped": ["merchant", "Class"]
+    }
+  ],
+  "invalid": [
+    {
+      "name": "v has 27 values",
+      "field": "v",
+      "payload": { "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "v has 29 values",
+      "field": "v",
+      "payload": { "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "v contains a string",
+      "field": "v",
+      "payload": { "time": 1, "amount": 1, "v": ["1", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "negative amount",
+      "field": "amount",
+      "payload": { "time": 1, "amount": -0.01, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "amount as numeric string",
+      "field": "amount",
+      "payload": { "time": 1, "amount": "149.62", "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "time missing",
+      "field": "time",
+      "payload": { "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "time is boolean",
+      "field": "time",
+      "payload": { "time": true, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "externalId contains a space",
+      "field": "externalId",
+      "payload": { "externalId": "tx 1", "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "externalId is 65 characters",
+      "field": "externalId",
+      "payload": { "externalId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "externalId is empty",
+      "field": "externalId",
+      "payload": { "externalId": "", "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "externalId is null",
+      "field": "externalId",
+      "payload": { "externalId": null, "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    },
+    {
+      "name": "label is 2",
+      "field": "label",
+      "payload": { "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "label": 2 }
+    },
+    {
+      "name": "label is boolean true",
+      "field": "label",
+      "payload": { "time": 1, "amount": 1, "v": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "label": true }
+    }
+  ]
+}

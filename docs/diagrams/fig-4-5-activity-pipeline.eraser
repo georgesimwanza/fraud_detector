@@ -1,0 +1,50 @@
+// Figure 4.5 — Activity diagram: transaction processing pipeline
+// Eraser: New diagram > Flow chart, paste this code.
+direction down
+
+Start [shape: oval, color: black, label: ""]
+Receive transaction [icon: inbox]
+API key valid? [shape: diamond, color: yellow]
+Reject 401 [shape: rectangle, color: red]
+Record matches contract? [shape: diamond, color: yellow]
+Reject 400 with field errors [shape: rectangle, color: red]
+ID already stored? [shape: diamond, color: yellow]
+Reject 409 duplicate [shape: rectangle, color: red]
+Settings row present? [shape: diamond, color: yellow]
+Return 503 run seed-config [shape: rectangle, color: red]
+Score with inference service [icon: cpu, color: purple]
+Scoring succeeded? [shape: diamond, color: yellow]
+Store as scoring_failed and return 503 [shape: rectangle, color: orange]
+Probability ≥ threshold? [shape: diamond, color: yellow]
+Mark high risk and create open alert [color: red]
+Mark low risk [color: green]
+Commit transaction + alert + daily stats in one DB transaction [icon: database, color: blue]
+Push live update to dashboards [icon: radio]
+Return 201 [color: green]
+End [shape: oval, color: black, label: ""]
+
+Start > Receive transaction
+Receive transaction > API key valid?
+API key valid? > Reject 401: no
+API key valid? > Record matches contract?: yes
+Record matches contract? > Reject 400 with field errors: no
+Record matches contract? > ID already stored?: yes
+ID already stored? > Reject 409 duplicate: yes
+ID already stored? > Settings row present?: no
+Settings row present? > Return 503 run seed-config: no
+Settings row present? > Score with inference service: yes
+Score with inference service > Scoring succeeded?
+Scoring succeeded? > Store as scoring_failed and return 503: no
+Scoring succeeded? > Probability ≥ threshold?: yes
+Probability ≥ threshold? > Mark high risk and create open alert: yes
+Probability ≥ threshold? > Mark low risk: no
+Mark high risk and create open alert > Commit transaction + alert + daily stats in one DB transaction
+Mark low risk > Commit transaction + alert + daily stats in one DB transaction
+Commit transaction + alert + daily stats in one DB transaction > Push live update to dashboards
+Push live update to dashboards > Return 201
+Return 201 > End
+Reject 401 > End
+Reject 400 with field errors > End
+Reject 409 duplicate > End
+Return 503 run seed-config > End
+Store as scoring_failed and return 503 > End

@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* Light theme: deep-navy chrome, bright-blue accent, white cards on a cool grey page.
+   Chart series and status colours are validated with the dataviz palette checker
+   (blue / teal / coral pass CVD separation on white; teal and coral sit under 3:1 contrast,
+   so every chart ships a legend and a table view). */
+:root {
+  color-scheme: light;
+  --page: #f3f5fa;
+  --surface: #ffffff;
+  --surface-2: #f5f7fc;
+  --ink: #1d2150;
+  --ink-2: #646a8c;
+  --muted: #9aa0b8;
+  --grid: #edf0f6;
+  --axis: #d5d9e6;
+  --line: #e7eaf3;
+  --accent: #4a5ff0;
+
+  --brand-50: #eef1fe;
+  --brand-100: #dfe4fd;
+  --brand-500: #4a5ff0;
+  --brand-600: #3f53e6;
+  --brand-700: #3343c9;
+  --brand-800: #262f8f;
+  --brand-950: #141742;
+
+  /* sidebar / login panel */
+  --navy: #22265f;
+  --navy-2: #2d3273;
+  --navy-deep: #191c4b;
+
+  --series-1: #4a5ff0;
+  --series-2: #12b5a0;
+  --series-3: #f0703c;
+  --good: #12a150;
+  --warning: #f5a524;
+  --serious: #f0703c;
+  --critical: #e5484d;
+  --track: #e9ecf5;
+  --banner: #fff4d6;
+
+  /* icon tiles (tint background, strong foreground) */
+  --tile-blue-bg: #eef1fe;
+  --tile-blue-fg: #4a5ff0;
+  --tile-teal-bg: #dcf6f2;
+  --tile-teal-fg: #0f9e8c;
+  --tile-amber-bg: #fff3d6;
+  --tile-amber-fg: #e0960b;
+  --tile-coral-bg: #ffe9e0;
+  --tile-coral-fg: #e2602c;
+  --tile-violet-bg: #ece9ff;
+  --tile-violet-fg: #7462ee;
+  --tile-green-bg: #dcf5e6;
+  --tile-green-fg: #12a150;
+
+  --button-gradient: linear-gradient(90deg, #6a86ff 0%, #3f56ec 100%);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-950: var(--brand-950);
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-navy-deep: var(--navy-deep);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --color-track: var(--track);
+  --color-banner: var(--banner);
+  --font-sans: var(--font-nunito), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --shadow-card: 0 2px 14px rgba(29, 33, 80, 0.06);
+  --shadow-button: 0 6px 16px rgba(63, 86, 236, 0.32);
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Primary action: the blue gradient pill. */
+.btn-primary {
+  background: var(--button-gradient);
+  box-shadow: var(--shadow-button);
+}
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+/* New rows in live tables fade in from an accent wash. */
+@keyframes row-flash {
+  from {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+  to {
+    background: transparent;
+  }
+}
+.row-new {
+  animation: row-flash 1.4s ease-out;
+}
+
+@media print {
+  aside,
+  header[data-chrome],
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}

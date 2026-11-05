@@ -1,0 +1,8 @@
+tensorflow==2.20.*
+numpy
+pandas
+scikit-learn
+imbalanced-learn
+joblib
+# evaluate_run.py --firestore only
+firebase-admin

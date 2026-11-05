@@ -1,0 +1,27 @@
+// Figure 4.8 — State chart: a transaction record from receipt to storage
+// Eraser: New diagram > Flow chart, paste this code.
+direction right
+
+Initial [shape: oval, color: black, label: ""]
+Received [shape: rectangle, icon: inbox, color: gray]
+Validated [shape: rectangle, icon: check, color: blue]
+Rejected [shape: rectangle, icon: slash, color: red]
+Scoring [shape: rectangle, icon: cpu, color: purple]
+Scored low risk [shape: rectangle, icon: shield, color: green]
+Scored high risk [shape: rectangle, icon: alert-triangle, color: red]
+Scoring failed [shape: rectangle, icon: alert-octagon, color: orange]
+Stored [shape: rectangle, icon: database, color: blue]
+Final [shape: oval, color: black, label: ""]
+
+Initial > Received: POST with API key
+Received > Rejected: bad key / invalid fields / duplicate id
+Received > Validated: matches the 30-feature contract
+Validated > Scoring: threshold read, request sent
+Scoring > Scored low risk: probability below threshold
+Scoring > Scored high risk: probability ≥ threshold, raises alert
+Scoring > Scoring failed: timeout or service down
+Scored low risk > Stored
+Scored high risk > Stored
+Scoring failed > Stored: kept, never dropped
+Stored > Final
+Rejected > Final: nothing written
